@@ -1,0 +1,5 @@
+world/
+backups/
+logs/
+crash-reports/
+*.log
