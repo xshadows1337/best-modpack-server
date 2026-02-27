@@ -17,7 +17,7 @@ WORKDIR /server
 # Download Fabric server launcher jar
 # =============================================================================
 ARG MC_VERSION=1.21.8
-ARG FABRIC_LOADER_VERSION=0.16.14
+ARG FABRIC_LOADER_VERSION=0.18.0
 ARG FABRIC_INSTALLER_VERSION=1.0.1
 
 RUN echo "Downloading Fabric ${FABRIC_LOADER_VERSION} for MC ${MC_VERSION}..." && \
