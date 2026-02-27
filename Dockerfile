@@ -1,54 +1,52 @@
 # =============================================================================
-# GT New Horizons 2.8.4 Server - Railway Deployment
+# Distant Horizons & Iris Shaders - Fabric Server for Railway
 # =============================================================================
-# Minecraft 1.7.10 | Forge (GTNH Custom) | Java 21
+# Minecraft 1.21.8 | Fabric 0.16.14 | Java 21
 # =============================================================================
 
 FROM eclipse-temurin:21-jre-jammy AS base
 
 # Install required utilities
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl unzip jq && \
+    apt-get install -y --no-install-recommends curl && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /server
 
 # =============================================================================
-# Download and extract GTNH server pack
+# Download Fabric server launcher jar
 # =============================================================================
-ARG GTNH_VERSION=2.8.4
-ARG GTNH_SERVER_URL=https://downloads.gtnewhorizons.com/ServerPacks/GT_New_Horizons_${GTNH_VERSION}_Server_Java_17-25.zip
+ARG MC_VERSION=1.21.8
+ARG FABRIC_LOADER_VERSION=0.16.14
+ARG FABRIC_INSTALLER_VERSION=1.0.1
 
-RUN echo "Downloading GTNH ${GTNH_VERSION} server pack..." && \
-    curl -fSL -o /tmp/gtnh-server.zip "${GTNH_SERVER_URL}" && \
-    echo "Extracting server pack..." && \
-    unzip -o /tmp/gtnh-server.zip -d /server && \
-    rm /tmp/gtnh-server.zip && \
-    echo "GTNH server pack extracted successfully."
+RUN echo "Downloading Fabric ${FABRIC_LOADER_VERSION} for MC ${MC_VERSION}..." && \
+    curl -fSL -o /server/fabric-server-launch.jar \
+    "https://meta.fabricmc.net/v2/versions/loader/${MC_VERSION}/${FABRIC_LOADER_VERSION}/${FABRIC_INSTALLER_VERSION}/server/jar" && \
+    echo "Fabric server jar ready."
 
 # =============================================================================
-# Accept Minecraft EULA (required to start the server)
+# Accept Minecraft EULA
 # =============================================================================
 RUN echo "eula=true" > /server/eula.txt
 
 # =============================================================================
-# Copy custom configs
+# Copy server files (mods, configs, properties, start script)
 # =============================================================================
+COPY mods/ /server/mods/
+COPY config/ /server/config/
 COPY server.properties /server/server.properties
 COPY start.sh /server/start.sh
 
-# Make scripts executable
-RUN chmod +x /server/start.sh && \
-    chmod +x /server/*.sh 2>/dev/null || true
+RUN chmod +x /server/start.sh
 
-# Persistent world data is handled by Railway volumes (configured in dashboard)
-# Mount point: /server/world
+# Persistent world data via Railway volume at /server/world
 
 # Minecraft default port
 EXPOSE 25565
 
-# Health check - verify the server process is running
-HEALTHCHECK --interval=60s --timeout=10s --start-period=300s --retries=3 \
+# Health check
+HEALTHCHECK --interval=60s --timeout=10s --start-period=180s --retries=3 \
     CMD pgrep -f "java" > /dev/null || exit 1
 
 ENTRYPOINT ["/server/start.sh"]
