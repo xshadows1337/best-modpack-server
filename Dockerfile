@@ -45,10 +45,8 @@ RUN chmod +x /server/start.sh && \
     chmod +x /server/*.sh 2>/dev/null || true && \
     chown -R minecraft:minecraft /server
 
-# =============================================================================
-# Volume for persistent world data
-# =============================================================================
-VOLUME ["/server/world", "/server/backups"]
+# Persistent world data is handled by Railway volumes (configured in dashboard)
+# Mount point: /server/world
 
 # Minecraft default port
 EXPOSE 25565
