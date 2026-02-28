@@ -14,7 +14,7 @@ RUN curl -fsSL -o forge-installer.jar \
 RUN echo "eula=true" > /server/eula.txt
 
 # Download mods from GitHub Release (avoids Railway upload size limit)
-# mods-version: v1.0.4 (restored JustEnoughIDs + fresh world reset with JEID active)
+# mods-version: v1.0.4 (restored JustEnoughIDs; disabled IaF structures for SkyGrid)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
     "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v5.zip" && \
