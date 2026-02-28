@@ -14,10 +14,10 @@ RUN curl -fsSL -o forge-installer.jar \
 RUN echo "eula=true" > /server/eula.txt
 
 # Download mods from GitHub Release (avoids Railway upload size limit)
-# mods-version: v1.0.1 (added Guide-API for Blood Magic)
+# mods-version: v1.0.2 (added BiblioCraft + JustEnoughIDs for server-client packet sync)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
-    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v2.zip" && \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v3.zip" && \
     unzip -q /tmp/mods.zip -d /server/mods/ && \
     rm /tmp/mods.zip
 
