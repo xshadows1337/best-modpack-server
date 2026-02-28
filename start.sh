@@ -8,10 +8,11 @@ if [ ! -f eula.txt ]; then echo "eula=true" > eula.txt; fi
 
 # One-time world reset: clears old/incompatible world (e.g. leftover Fabric world data)
 # After first clean start, marker file persists on volume to prevent repeated resets.
-MARKER="/server/.forge_1.12.2_world"
+MARKER="/server/world/.forge_1.12.2_marker"
 if [ ! -f "$MARKER" ] || [ "${RESET_WORLD:-false}" = "true" ]; then
     echo "[STARTUP] Clearing old world data (one-time reset for Forge 1.12.2)..."
-    rm -rf /server/world
+    # Can't rm -rf the mount point itself; clear contents instead
+    find /server/world -mindepth 1 -delete 2>/dev/null || true
     touch "$MARKER"
     echo "[STARTUP] World cleared. Forge 1.12.2 will generate fresh SkyGrid world."
 fi
