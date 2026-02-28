@@ -16,12 +16,9 @@ RUN echo "eula=true" > /server/eula.txt
 # Download mods from GitHub Release (avoids Railway upload size limit)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
-    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods.zip" && \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.1/mods.zip" && \
     unzip -q /tmp/mods.zip -d /server/mods/ && \
-    rm /tmp/mods.zip && \
-    # Guide-API is required by Blood Magic but not in the modpack - download separately
-    curl -fsSL -o /server/mods/Guide-API-1.12.2-2.1.8-65.jar \
-    "https://mediafilez.forgecdn.net/files/2645/837/Guide-API-1.12.2-2.1.8-65.jar"
+    rm /tmp/mods.zip
 
 # Copy configs
 COPY config/ /server/config/
