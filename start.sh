@@ -20,4 +20,10 @@ fi
 FORGE_JAR=$(find /server -maxdepth 1 -name "forge-*.jar" ! -name "*installer*" | sort | tail -1)
 if [ -z "$FORGE_JAR" ]; then ls -la /server/; exit 1; fi
 echo "[STARTUP] Using jar: $FORGE_JAR"
-exec java -Xmx${MAX_MEMORY} -Xms${MIN_MEMORY} -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -Dfml.readTimeout=60 -Dfml.loginTimeout=60 -jar $FORGE_JAR nogui
+exec java -Xmx${MAX_MEMORY} -Xms${MIN_MEMORY} \
+    -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC \
+    -XX:MaxMetaspaceSize=512m -XX:G1HeapRegionSize=8m \
+    -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 \
+    -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 \
+    -Dfml.readTimeout=90 -Dfml.loginTimeout=90 \
+    -jar $FORGE_JAR nogui
