@@ -14,10 +14,10 @@ RUN curl -fsSL -o forge-installer.jar \
 RUN echo "eula=true" > /server/eula.txt
 
 # Download mods from GitHub Release (avoids Railway upload size limit)
-# mods-version: v1.0.6 (replaced Lost Cities with Sky Islands mod)
+# mods-version: v1.0.7 (removed Sky Islands, using DEFAULT world type)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
-    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v6.zip" && \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v7.zip" && \
     unzip -q /tmp/mods.zip -d /server/mods/ && \
     rm /tmp/mods.zip
 
