@@ -8,13 +8,13 @@ if [ ! -f eula.txt ]; then echo "eula=true" > eula.txt; fi
 
 # One-time world reset: clears old/incompatible world (e.g. leftover Fabric world data)
 # After first clean start, marker file persists on volume to prevent repeated resets.
-MARKER="/server/world/.forge_1.12.2_lostcities_floating_marker"
+MARKER="/server/world/.forge_1.12.2_default_v2_marker"
 if [ ! -f "$MARKER" ] || [ "${RESET_WORLD:-false}" = "true" ]; then
-    echo "[STARTUP] Clearing old world data (reset: Lost Cities floating islands)..."
+    echo "[STARTUP] Clearing old world data (reset: DEFAULT world)..."
     # Can't rm -rf the mount point itself; clear contents instead
     find /server/world -mindepth 1 -delete 2>/dev/null || true
     touch "$MARKER"
-    echo "[STARTUP] World cleared. Generating Lost Cities floating islands world."
+    echo "[STARTUP] World cleared. Generating fresh DEFAULT world."
 fi
 
 FORGE_JAR=$(find /server -maxdepth 1 -name "forge-*.jar" ! -name "*installer*" | sort | tail -1)
