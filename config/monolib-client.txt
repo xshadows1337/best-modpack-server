@@ -1,2 +1,0 @@
-# Determines whether additional text will be logged to the system console. Also enables some particles and highlights.
-debugging=false

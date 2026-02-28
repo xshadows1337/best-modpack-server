@@ -1,52 +1,31 @@
-# =============================================================================
-# Distant Horizons & Iris Shaders - Fabric Server for Railway
-# =============================================================================
-# Minecraft 1.21.8 | Fabric 0.16.14 | Java 21
-# =============================================================================
+FROM eclipse-temurin:8-jre-jammy
 
-FROM eclipse-temurin:21-jre-jammy AS base
-
-# Install required utilities
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /server
 
-# =============================================================================
-# Download Fabric server launcher jar
-# =============================================================================
-ARG MC_VERSION=1.21.8
-ARG FABRIC_LOADER_VERSION=0.18.0
-ARG FABRIC_INSTALLER_VERSION=1.0.1
+# Download and install Forge 1.12.2 server
+RUN curl -fsSL -o forge-installer.jar \
+    "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-installer.jar" \
+    && java -jar forge-installer.jar --installServer \
+    && rm forge-installer.jar
 
-RUN echo "Downloading Fabric ${FABRIC_LOADER_VERSION} for MC ${MC_VERSION}..." && \
-    curl -fSL -o /server/fabric-server-launch.jar \
-    "https://meta.fabricmc.net/v2/versions/loader/${MC_VERSION}/${FABRIC_LOADER_VERSION}/${FABRIC_INSTALLER_VERSION}/server/jar" && \
-    echo "Fabric server jar ready."
-
-# =============================================================================
-# Accept Minecraft EULA
-# =============================================================================
+# Accept EULA
 RUN echo "eula=true" > /server/eula.txt
 
-# =============================================================================
-# Copy server files (mods, configs, properties, start script)
-# =============================================================================
-COPY mods/ /server/mods/
+# Download mods from GitHub Release (avoids Railway upload size limit)
+RUN mkdir -p /server/mods && \
+    curl -fsSL -o /tmp/mods.zip \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods.zip" && \
+    unzip -q /tmp/mods.zip -d /server/mods/ && \
+    rm /tmp/mods.zip
+
+# Copy configs
 COPY config/ /server/config/
 COPY server.properties /server/server.properties
+COPY ops.json /server/ops.json
 COPY start.sh /server/start.sh
-
 RUN chmod +x /server/start.sh
 
-# Persistent world data via Railway volume at /server/world
-
-# Minecraft default port
 EXPOSE 25565
-
-# Health check
-HEALTHCHECK --interval=60s --timeout=10s --start-period=180s --retries=3 \
-    CMD pgrep -f "java" > /dev/null || exit 1
-
 ENTRYPOINT ["/server/start.sh"]

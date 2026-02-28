@@ -1,2 +1,0 @@
-# Determines whether additional text will be logged to the system console.
-debugging=false

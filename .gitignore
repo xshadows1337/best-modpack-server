@@ -1,5 +1,7 @@
 world/
 backups/
+mods/
+mods.zip
 logs/
 crash-reports/
 *.log
