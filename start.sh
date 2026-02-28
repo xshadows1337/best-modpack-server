@@ -5,6 +5,17 @@ MAX_MEMORY="${JAVA_XMX:-4G}"
 MIN_MEMORY="${JAVA_XMS:-2G}"
 cd /server
 if [ ! -f eula.txt ]; then echo "eula=true" > eula.txt; fi
+
+# One-time world reset: clears old/incompatible world (e.g. leftover Fabric world data)
+# After first clean start, marker file persists on volume to prevent repeated resets.
+MARKER="/server/.forge_1.12.2_world"
+if [ ! -f "$MARKER" ] || [ "${RESET_WORLD:-false}" = "true" ]; then
+    echo "[STARTUP] Clearing old world data (one-time reset for Forge 1.12.2)..."
+    rm -rf /server/world
+    touch "$MARKER"
+    echo "[STARTUP] World cleared. Forge 1.12.2 will generate fresh SkyGrid world."
+fi
+
 FORGE_JAR=$(find /server -maxdepth 1 -name "forge-*.jar" ! -name "*installer*" | sort | tail -1)
 if [ -z "$FORGE_JAR" ]; then ls -la /server/; exit 1; fi
 echo "[STARTUP] Using jar: $FORGE_JAR"
