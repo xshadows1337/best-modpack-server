@@ -22,6 +22,14 @@ if [ ! -f eula.txt ] || ! grep -q "eula=true" eula.txt; then
 fi
 
 echo "[STARTUP] Starting Forge 1.12.2 server..."
+# Find the Forge server jar dynamically
+FORGE_JAR=$(find /server -maxdepth 1 -name "forge-*.jar" ! -name "*installer*" | sort | tail -1)
+if [ -z "$FORGE_JAR" ]; then
+    echo "[ERROR] Could not find Forge server jar! Contents of /server:"
+    ls -la /server/
+    exit 1
+fi
+echo "[STARTUP] Using jar: $FORGE_JAR"
 exec java \
     -Xmx${MAX_MEMORY} \
     -Xms${MIN_MEMORY} \
@@ -33,5 +41,5 @@ exec java \
     -XX:+AlwaysPreTouch \
     -Dfml.readTimeout=60 \
     -Dfml.loginTimeout=60 \
-    -jar forge-1.12.2-14.23.5.2860-universal.jar nogui
-    -jar forge-1.12.2-14.23.5.2860-universal.jar nogui
+    -jar $FORGE_JAR nogui
+    -jar $FORGE_JAR nogui
