@@ -14,10 +14,10 @@ RUN curl -fsSL -o forge-installer.jar \
 RUN echo "eula=true" > /server/eula.txt
 
 # Download mods from GitHub Release (avoids Railway upload size limit)
-# mods-version: v1.0.4 (restored JustEnoughIDs; disabled IaF structures for SkyGrid)
+# mods-version: v1.0.6 (replaced Lost Cities with Sky Islands mod)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
-    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v5.zip" && \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v6.zip" && \
     unzip -q /tmp/mods.zip -d /server/mods/ && \
     rm /tmp/mods.zip
 
