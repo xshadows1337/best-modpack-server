@@ -17,7 +17,7 @@ RUN echo "eula=true" > /server/eula.txt
 # mods-version: v1.0.1 (added Guide-API for Blood Magic)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
-    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods.zip" && \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v2.zip" && \
     unzip -q /tmp/mods.zip -d /server/mods/ && \
     rm /tmp/mods.zip
 
