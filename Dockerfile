@@ -14,10 +14,10 @@ RUN curl -fsSL -o forge-installer.jar \
 RUN echo "eula=true" > /server/eula.txt
 
 # Download mods from GitHub Release (avoids Railway upload size limit)
-# mods-version: v1.0.8 (removed SkyGrid mod, DEFAULT world type)
+# mods-version: v1.0.9 (removed Iberia mod - was forcing void world spawn)
 RUN mkdir -p /server/mods && \
     curl -fsSL -o /tmp/mods.zip \
-    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v8.zip" && \
+    "https://github.com/xshadows1337/best-modpack-server/releases/download/v1.0/mods_v9.zip" && \
     unzip -q /tmp/mods.zip -d /server/mods/ && \
     rm /tmp/mods.zip
 
