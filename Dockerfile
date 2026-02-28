@@ -25,7 +25,7 @@ COPY config/ /server/config/
 COPY server.properties /server/server.properties
 COPY ops.json /server/ops.json
 COPY start.sh /server/start.sh
-RUN chmod +x /server/start.sh
+RUN sed -i 's/\r//' /server/start.sh && chmod +x /server/start.sh
 
 EXPOSE 25565
 ENTRYPOINT ["/server/start.sh"]
